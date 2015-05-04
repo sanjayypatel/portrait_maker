@@ -21,3 +21,8 @@ String getTimestamp(){
   timestamp += String.valueOf(second());
    return timestamp;
 }
+
+void KillGUI() {
+  Interactive.setActive( run_toggle, false ); 
+  Interactive.setActive( background_toggle, false );
+}
