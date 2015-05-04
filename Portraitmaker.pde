@@ -8,7 +8,7 @@
 
 //Initialize global variables used by drawing algorithm
 
-//--Original image file
+//--Original image file variable
 PImage img;
 
 //*************************************************
@@ -24,9 +24,13 @@ int tempLoc = 0;
 
 //*************************************************
 //--USER SETTINGS
+
+//Path to original file
+String original = "./img/daxdog.jpg";
+
 int     rectSize              = 256;
-int     timeFrame             = 1000;
-int     amountToAdd           = 50;
+int     timeFrame             = 100;
+int     amountToAdd           = 20;
 int     rectSizeDecrement     = 16;
 boolean backgroundImage       = true;
 
@@ -61,12 +65,12 @@ void setup() {
   
   //Load original image file
   loadPixels();
-  img = loadImage("./img/groupy.jpg");
+  img = loadImage(original);
   if(debug) println(img.pixels.length);
   
   //Set size of new image to size of original
   size(img.width, img.height);
-  smooth();
+
   //Create Rects by passing a center point and dimensions, rather than a corner
   rectMode(CENTER);
   
@@ -100,7 +104,7 @@ void draw() {
 
   //if rectSize value falls below 1 then, stop drawing
   if(rectSize < 1) { 
-    saveFrame("./out/output.png");
+    saveFrame("./out/output" + getTimestamp() + ".png");
     if(debug) println("done");
     exit();
   }else{//otherwise draw
@@ -121,18 +125,6 @@ void draw() {
 
 }
 
-void keyPressed() {
- switch(key){
-   case 's':
-   saveFrame("./out/ouput-##########.png");
-   break;  
-   case 'p':
-   noLoop(); //pause the program
-   break;
-   case 'o'://resume the program
-   loop();
-   break;
- }
-}
+
 
 
