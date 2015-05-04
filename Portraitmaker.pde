@@ -34,6 +34,7 @@ boolean selected = false;
 //--GUI ELEMENTS
 Toggle run_toggle;
 Toggle background_toggle;
+Slider rectSize_slider; //16 - 512
 //*************************************************
 
 
@@ -42,13 +43,13 @@ Toggle background_toggle;
 
 //*************************************************
 //--USER SETTINGS
-SettingsMaster master;
+
 
 
 //Path to original file
 String original = "./img/daxdog.jpg";
 
-int     rectSize              = 256;
+float   rectSize              = 512;
 int     timeFrame             = 100;
 int     amountToAdd           = 20;
 int     rectSizeDecrement     = 16;
@@ -82,26 +83,15 @@ boolean debug = true;
 //INITIALIZE THE PROGRAM
 void setup() {
   Interactive.make(this);
-  master = new SettingsMaster();
   size(displayWidth , displayHeight );
   if(frame != null) frame.setResizable(true);
   selectInput("Choose an image to process: ", "imageSelected");
-  
-  //Load original image file
-  //loadPixels();
-//  img = loadImage(original);
-//  if(debug) println(img.pixels.length);
-//  numOfPixels = img.pixels.length;
-//  //Set size of new image to size of original
-//  size(img.width, img.height);
-
-  //Create Rects by passing a center point and dimensions, rather than a corner
-  rectMode(CENTER);
 
   
   //Create GUI Elements
   background_toggle = new Toggle( 15f, 15f, 15f, false);
   run_toggle = new Toggle( 30f, 15f, 15f, false);
+  rectSize_slider = new Slider (15f, 30f, 256f, 15f);
   
 
 
@@ -116,6 +106,7 @@ void draw() {
     //First, kill all GUI elements - but check if active first so that this executes only once
     if(run_toggle.isActive()){
       KillGUI();
+      rectMode(CENTER);
       //set the background one last time to cover up the now-deactivated GUI
       if(background_image) {//background_image stores the background_toggle setting so that it can be used after Killing GUI
         background(img);
@@ -146,7 +137,9 @@ void draw() {
       if(debug) println(rectSize);
     }
   }else if(selected){ //This will loop while the GUI is active and run_toggle has not been flipped
-    
+    //Inside the else if (selected) changes to the GUI will be read and user settings (global vars) will be updated
+    //once run_toggle is turned on, the ability to change settings based on GUI will be disabled.
+
     //Based on user input, set the initial background to either the original image or the average color of entire image.
     if(background_toggle.on) { //this will update display while user is choosing settings.
       background(img);
@@ -156,6 +149,11 @@ void draw() {
       background( abs(averageR - colorScale1) , abs(averageG - colorScale1), abs(averageB - colorScale1)); 
       if(background_image) background_image = false;
     }
+    if(rectSize_slider.value * 512 != rectSize){
+      rectSize = (rectSize_slider.value * 496) + 16;
+    }
+    
+    
     
   }
   

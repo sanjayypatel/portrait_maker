@@ -73,5 +73,6 @@ String getTimestamp(){
 void KillGUI() {
   Interactive.setActive( run_toggle, false ); 
   Interactive.setActive( background_toggle, false );
+  Interactive.setActive( rectSize_slider, false );
 }
 

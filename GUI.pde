@@ -1,3 +1,5 @@
+//Classes are modified versions of the GUIDO library examples
+
 
 public class Toggle {
     float x, y, width, height;
@@ -30,12 +32,42 @@ public class Toggle {
     }
 }
 
-public class SettingsMaster {
-
-  
-  SettingsMaster() {
+public class Slider
+{
+    float x, y, width, height;
+    float valueX = 0, value;
+    boolean activated = true;
     
-  }
+    Slider ( float xx, float yy, float ww, float hh ) {
+        x = xx; 
+        y = yy; 
+        width = ww; 
+        height = hh;
+        valueX = x;
+        // register it
+        Interactive.add( this );
+    }
+    
+    // called from manager
+    void mouseDragged ( float mx, float my ) {
+        valueX = mx - height/2;
+        if ( valueX < x ) valueX = x;
+        if ( valueX > x+width-height ) valueX = x+width-height;
+        value = map( valueX, x, x+width-height, 0, 1 );
+    }
 
+    void draw () {
+        rectMode(CORNER);
+        noStroke();
+        fill( 100 );
+        rect(x, y, width, height);     
+        fill( 120 );
+        rect( valueX, y, height, height );
+    }
+        boolean isActive () {
+        return activated;
+    }
+    void setActive ( boolean setTo ) {
+        activated = setTo;
+    }
 }
-
