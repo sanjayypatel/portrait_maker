@@ -1,3 +1,5 @@
+import de.bezier.guido.*;
+
 /*************************************************
   Portrait Maker Project
   by Sanjay Y Patel
@@ -10,6 +12,7 @@
 
 //--Original image file variable
 PImage img;
+PImage loadedImg;
 
 //*************************************************
 //--Initialize utility variables
@@ -18,12 +21,29 @@ int counter = 0;
 float totalR = 0;
 float totalG = 0;
 float totalB = 0;
+int numOfPixels = 0;
+float averageR = 0;
+float averageG = 0;
+float averageB = 0;
 int tempLoc = 0;
+boolean running = false;
+boolean background_image;
+boolean selected = false;
+
 //*************************************************
+//--GUI ELEMENTS
+Toggle run_toggle;
+Toggle background_toggle;
+//*************************************************
+
+
+
 
 
 //*************************************************
 //--USER SETTINGS
+SettingsMaster master;
+
 
 //Path to original file
 String original = "./img/daxdog.jpg";
@@ -32,7 +52,6 @@ int     rectSize              = 256;
 int     timeFrame             = 100;
 int     amountToAdd           = 20;
 int     rectSizeDecrement     = 16;
-boolean backgroundImage       = true;
 
 //0 for light emphasis, 255 for dark emphasis
 int     alphaScale            = 255;
@@ -62,67 +81,84 @@ boolean debug = true;
 
 //INITIALIZE THE PROGRAM
 void setup() {
+  Interactive.make(this);
+  master = new SettingsMaster();
+  size(displayWidth , displayHeight );
+  if(frame != null) frame.setResizable(true);
+  selectInput("Choose an image to process: ", "imageSelected");
   
   //Load original image file
-  loadPixels();
-  img = loadImage(original);
-  if(debug) println(img.pixels.length);
-  
-  //Set size of new image to size of original
-  size(img.width, img.height);
+  //loadPixels();
+//  img = loadImage(original);
+//  if(debug) println(img.pixels.length);
+//  numOfPixels = img.pixels.length;
+//  //Set size of new image to size of original
+//  size(img.width, img.height);
 
   //Create Rects by passing a center point and dimensions, rather than a corner
   rectMode(CENTER);
+
   
-  //Based on user input, set the initial background to either the original image or the average color of entire image.
-  if(backgroundImage) {
-    background(img);
-  }else {
-    //Iterate over the entire img and summ all of the color channels
-    for(int x= 0; x < img.width; x++) {
-      for(int y = 0; y < img.height; y++) {
-        tempLoc = x + y*img.width;
-        totalR += red(img.pixels[tempLoc]);
-        totalG += green(img.pixels[tempLoc]);
-        totalB += blue(img.pixels[tempLoc]);
-      }
-    }
-    //Calculate average RGB values for img
-    int numOfPixels = img.width * img.height;
-    float averageR = totalR / numOfPixels;
-    float averageG = totalG / numOfPixels;
-    float averageB = totalB / numOfPixels;
-    //Set background to average color of entire img
-    background( abs(totalR - colorScale1) , abs(totalG - colorScale1), abs(totalB - colorScale1)); 
-  }
+  //Create GUI Elements
+  background_toggle = new Toggle( 15f, 15f, 15f, false);
+  run_toggle = new Toggle( 30f, 15f, 15f, false);
+  
+
+
+  //display background image behind GUI
+  background(0);
 }
 
 void draw() {
 
-  //Increment counter to track of number of pairs of rectangles
-  counter++;
-
-  //if rectSize value falls below 1 then, stop drawing
-  if(rectSize < 1) { 
-    saveFrame("./out/output" + getTimestamp() + ".png");
-    if(debug) println("done");
-    exit();
-  }else{//otherwise draw
-    generateRectsandLines();
-  }
-
-  //when counter triggers trimeframe, rectSize is decremented
-  //and timeframe incremented which leads to more and smaller rects  
-  if(counter == timeFrame) {
-    rectSize -= rectSizeDecrement;
-    timeFrame += amountToAdd;
-    distanceWDivisor += distanceModifier;
-    distanceHDivisor += distanceModifier;
-    counter = 0;
-    if(debug) println(rectSize);
+  if(run_toggle.on) { //If the run_toggle has been flipped, then enter the drawing phase
+  
+    //First, kill all GUI elements - but check if active first so that this executes only once
+    if(run_toggle.isActive()){
+      KillGUI();
+      //set the background one last time to cover up the now-deactivated GUI
+      if(background_image) {//background_image stores the background_toggle setting so that it can be used after Killing GUI
+        background(img);
+      }else { 
+        background( abs(averageR - colorScale1) , abs(averageG - colorScale1), abs(averageB - colorScale1)); 
+      }
+    }
+    
+    //Increment counter to track of number of pairs of rectangles
+    counter++;
+    //if rectSize value falls below 1 then, stop drawing
+    if(rectSize < 1) { 
+      saveFrame("./out/output" + getTimestamp() + ".png");
+      if(debug) println("done");
+      exit();
+    }else{//otherwise draw
+      generateRectsandLines();
+    }
+ 
+    //when counter triggers trimeframe, rectSize is decremented
+    //and timeframe incremented which leads to more and smaller rects  
+    if(counter == timeFrame) {
+      rectSize -= rectSizeDecrement;
+      timeFrame += amountToAdd;
+      distanceWDivisor += distanceModifier;
+      distanceHDivisor += distanceModifier;
+      counter = 0;
+      if(debug) println(rectSize);
+    }
+  }else if(selected){ //This will loop while the GUI is active and run_toggle has not been flipped
+    
+    //Based on user input, set the initial background to either the original image or the average color of entire image.
+    if(background_toggle.on) { //this will update display while user is choosing settings.
+      background(img);
+      if(!background_image) background_image = true;
+    }else { 
+      //Set background to average color of entire img
+      background( abs(averageR - colorScale1) , abs(averageG - colorScale1), abs(averageB - colorScale1)); 
+      if(background_image) background_image = false;
+    }
+    
   }
   
-
 }
 
 
