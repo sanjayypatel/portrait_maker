@@ -8,20 +8,10 @@ void generateRectsandLines() {
   int x2 = abs(int(x1 + random(-xRange, xRange)));
   int y2 = abs(int(y1 + random(-yRange, yRange)));
   
-  if(x2 < 0 ) { 
-    //println("x2 too small" + x2);
-    x2 = 0;}
-  if (x2 >= img.width) { 
-    //println("x2 too big" + x2);  
-    x2 = img.width - 1;
-    //println("changed to " + x2);
-  }
-  if (y2 < 0) { 
-    //println("y2 too small" + y2);
-    y2 = 0;}
-  if (y2 >= img.height) {
-  //  println("y2 too big" + y2);
-    y2 = img.height - 1;}  
+  if (x2 < 0 ) { x2 = 0;}
+  if (x2 >= img.width) { x2 = img.width - 1; }
+  if (y2 < 0) {y2 = 0;}
+  if (y2 >= img.height) { y2 = img.height - 1; }  
   
   float distance = sqrt(sq(x2 - x1) + sq(y2 - y1));
 
@@ -51,17 +41,17 @@ void generateRectsandLines() {
   distance = (distance / img.width) * 255;
     
     //draw rects at loc1 and loc2 and set size semi-randomly based
-    //on current pointillize values
+    //on current rectSize values
   if(rectStroked) stroke(r2, g2, b2, a2*2);
   else noStroke();
   if(rectFilled) fill(r1,g1,b1, a1);
   else noFill();
-  rect(x1, y1, pointillize/random(1,8), pointillize/random(1, 8));
+  rect(x1, y1, rectSize/random(1,8), rectSize/random(1, 8));
   if(rectStroked) stroke(r1, g1, b1, a1*2);
   else noStroke();
   if(rectFilled) fill(r2, g2, b2, a2);
   else noFill();
-  rect(x2, y2, pointillize/random(1, 8), pointillize/random(1, 8));
+  rect(x2, y2, rectSize/random(1, 8), rectSize/random(1, 8));
    
   //draw line connecting loc1 and loc2 using average color 
   //stroke(rAve, gAve, bAve, abs(255 - distance)/lineAlphaModifier + baseAlphaLine);
