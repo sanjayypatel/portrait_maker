@@ -29,12 +29,14 @@ int tempLoc = 0;
 boolean running = false;
 boolean background_image;
 boolean selected = false;
+PFont myFont;
 
 //*************************************************
 //--GUI ELEMENTS
 Toggle run_toggle;
 Toggle background_toggle;
 Slider rectSize_slider; //16 - 512
+Slider rectDecrement_slider; //2 - 64
 //*************************************************
 
 
@@ -50,7 +52,7 @@ Slider rectSize_slider; //16 - 512
 String original = "./img/daxdog.jpg";
 
 float   rectSize              = 512;
-int     timeFrame             = 100;
+int     timeFrame             = 1000;
 int     amountToAdd           = 20;
 int     rectSizeDecrement     = 16;
 
@@ -86,12 +88,14 @@ void setup() {
   size(displayWidth , displayHeight );
   if(frame != null) frame.setResizable(true);
   selectInput("Choose an image to process: ", "imageSelected");
-
+  setupFont();
   
   //Create GUI Elements
-  background_toggle = new Toggle( 15f, 15f, 15f, false);
-  run_toggle = new Toggle( 30f, 15f, 15f, false);
-  rectSize_slider = new Slider (15f, 30f, 256f, 15f);
+  rectMode(CORNER);
+  run_toggle = new Toggle( 215f, 15f, 15f, false);
+  background_toggle = new Toggle( 215f, 45f, 15f, false);
+  rectSize_slider = new Slider (215f, 75f, 256f, 15f);
+  rectDecrement_slider = new Slider (215f, 105f, 256f, 15f);
   
 
 
@@ -139,7 +143,7 @@ void draw() {
   }else if(selected){ //This will loop while the GUI is active and run_toggle has not been flipped
     //Inside the else if (selected) changes to the GUI will be read and user settings (global vars) will be updated
     //once run_toggle is turned on, the ability to change settings based on GUI will be disabled.
-
+   
     //Based on user input, set the initial background to either the original image or the average color of entire image.
     if(background_toggle.on) { //this will update display while user is choosing settings.
       background(img);
@@ -149,12 +153,20 @@ void draw() {
       background( abs(averageR - colorScale1) , abs(averageG - colorScale1), abs(averageB - colorScale1)); 
       if(background_image) background_image = false;
     }
-    if(rectSize_slider.value * 512 != rectSize){
+    if((rectSize_slider.value * 496) + 16 != rectSize){
       rectSize = (rectSize_slider.value * 496) + 16;
+    }
+    if(floor((rectDecrement_slider.value * 62) + 2) != rectSizeDecrement){
+      rectSizeDecrement = floor((rectDecrement_slider.value * 62) + 2);
     }
     
     
-    
+    fill(255);
+    textSize(24);
+    text("Run Program:", 15, 30);
+    text("Background Visible:", 15, 60); 
+    text("Start Size " + String.valueOf(floor(rectSize)) + " :", 15, 90);
+    text("Decrement by " + String.valueOf(rectSizeDecrement) + " :", 15, 120);
   }
   
 }

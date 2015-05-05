@@ -1,11 +1,9 @@
 //Classes are modified versions of the GUIDO library examples
 
-
 public class Toggle {
     float x, y, width, height;
     public boolean on;
-    boolean activated = true;
-    
+    boolean activated = true;  
     Toggle ( float xPos, float yPos, float w, boolean defaultValue) {
         x = xPos; 
         y = yPos; 
@@ -14,7 +12,6 @@ public class Toggle {
         on = defaultValue;
         Interactive.add( this ); // register it with the manager
     }
-
 // called by manager
     void mousePressed () {
         on = !on;
@@ -43,7 +40,8 @@ public class Slider
         y = yy; 
         width = ww; 
         height = hh;
-        valueX = x;
+        valueX = x + ww/2;
+        value = map( valueX, x, x+width-height, 0, 1 );
         // register it
         Interactive.add( this );
     }
@@ -55,9 +53,7 @@ public class Slider
         if ( valueX > x+width-height ) valueX = x+width-height;
         value = map( valueX, x, x+width-height, 0, 1 );
     }
-
     void draw () {
-        rectMode(CORNER);
         noStroke();
         fill( 100 );
         rect(x, y, width, height);     

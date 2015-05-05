@@ -31,6 +31,12 @@ void imageSelected(File selection) {
   }
 }
 
+void setupFont(){
+  myFont = createFont("Urba.ttf", 24);
+  textFont(myFont);
+//  textAlign(LEFT, TOP);
+}
+
 void findAverageColor(){
    //Iterate over the entire img and summ all of the color channels
     for(int x= 0; x < img.width; x++) {
@@ -74,5 +80,6 @@ void KillGUI() {
   Interactive.setActive( run_toggle, false ); 
   Interactive.setActive( background_toggle, false );
   Interactive.setActive( rectSize_slider, false );
+  Interactive.setActive( rectDecrement_slider, false);
 }
 
