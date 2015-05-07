@@ -59,4 +59,4 @@ void generateRectsandLines() {
   stroke(r1, g1, b1, abs(255 - distance)/lineAlphaModifier + baseAlphaLine);
   line(x1, y1, x2, y2);
   
-}
+} //generateRectsandLines()

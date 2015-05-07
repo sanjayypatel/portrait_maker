@@ -1,6 +1,6 @@
 Portrait Maker Project
 by Sanjay Y Patel
-@bupping on twitter
+@sanjayypatel on twitter
 sanjayypatel on github
 feedback, ideas, suggestions welcome!
 
@@ -25,3 +25,9 @@ a user to adjust settings before running the process
 * isolate and modularize the various alternative generating methods - this is
 just one of a set of algorithms that could be used. pulling from other/older
 versions and creating the option to utilize those features.
+* BUG -  Sometimes, application crashes on image load due to size mismatch between image and application.
+
+
+NOTES:
+This sketch requires the GUIDO library by fjenett for
+https://github.com/fjenett/Guido

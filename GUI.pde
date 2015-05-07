@@ -27,7 +27,7 @@ public class Toggle {
     void setActive ( boolean setTo ) {
         activated = setTo;
     }
-}
+} //Toggle class
 
 public class Slider
 {
@@ -41,6 +41,19 @@ public class Slider
         width = ww; 
         height = hh;
         valueX = x + ww/2;
+        value = map( valueX, x, x+width-height, 0, 1 );
+        // register it
+        Interactive.add( this );
+    }
+    Slider ( float xx, float yy, float ww, float hh, float defaultValue ) {
+        x = xx; 
+        y = yy; 
+        width = ww; 
+        height = hh;
+        if(0 <= defaultValue && defaultValue <= 1)
+          valueX = x + (defaultValue * width) - height;
+        else
+          valueX = x + ww/2;
         value = map( valueX, x, x+width-height, 0, 1 );
         // register it
         Interactive.add( this );
@@ -66,4 +79,4 @@ public class Slider
     void setActive ( boolean setTo ) {
         activated = setTo;
     }
-}
+} //Toggle class

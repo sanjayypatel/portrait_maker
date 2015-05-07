@@ -81,5 +81,10 @@ void KillGUI() {
   Interactive.setActive( background_toggle, false );
   Interactive.setActive( rectSize_slider, false );
   Interactive.setActive( rectDecrement_slider, false);
+  Interactive.setActive( timeFrame_slider, false);
+  Interactive.setActive( amountToAdd_slider, false);
+  Interactive.setActive( alphaScale_slider, false);
+  Interactive.setActive( rectFilled_toggle, false);
+  Interactive.setActive( rectStroked_toggle, false);
 }
 

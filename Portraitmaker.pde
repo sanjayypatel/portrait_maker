@@ -1,3 +1,5 @@
+//Uses the GUIDO library by fjenett - https://github.com/fjenett/Guido
+//supplies framework for GUI classes and interactivity
 import de.bezier.guido.*;
 
 /*************************************************
@@ -37,6 +39,14 @@ Toggle run_toggle;
 Toggle background_toggle;
 Slider rectSize_slider; //16 - 512
 Slider rectDecrement_slider; //2 - 64
+Slider timeFrame_slider; //100 - 1000
+Slider amountToAdd_slider; // 0 - 1000
+Slider alphaScale_slider; //0 - 256
+
+Toggle rectFilled_toggle;
+Toggle rectStroked_toggle;
+//baselinealphas mods
+//alphascalers
 //*************************************************
 
 
@@ -45,8 +55,6 @@ Slider rectDecrement_slider; //2 - 64
 
 //*************************************************
 //--USER SETTINGS
-
-
 
 //Path to original file
 String original = "./img/daxdog.jpg";
@@ -96,12 +104,16 @@ void setup() {
   background_toggle = new Toggle( 215f, 45f, 15f, false);
   rectSize_slider = new Slider (215f, 75f, 256f, 15f);
   rectDecrement_slider = new Slider (215f, 105f, 256f, 15f);
+  timeFrame_slider = new Slider (215f, 135f, 256f, 15f);
+  amountToAdd_slider = new Slider (215f, 165f, 256f, 15f);
+  alphaScale_slider = new Slider (215f, 195f, 256f, 15f, 1f);
   
-
+  rectFilled_toggle = new Toggle( 712f, 15f, 15f, true);
+  rectStroked_toggle = new Toggle( 712f, 45f, 15f, true);
 
   //display background image behind GUI
   background(0);
-}
+} //setup()
 
 void draw() {
 
@@ -159,17 +171,35 @@ void draw() {
     if(floor((rectDecrement_slider.value * 62) + 2) != rectSizeDecrement){
       rectSizeDecrement = floor((rectDecrement_slider.value * 62) + 2);
     }
-    
-    
+    if(floor((timeFrame_slider.value * 900) + 100) != timeFrame){
+      timeFrame = floor((timeFrame_slider.value * 900) + 100);
+    }  
+    if(floor(amountToAdd_slider.value * 1000) != amountToAdd){
+      amountToAdd = floor(amountToAdd_slider.value * 1000);
+    }      
+    if(floor(alphaScale_slider.value * 256) != alphaScale){
+      alphaScale = floor(alphaScale_slider.value * 256);
+    }   
+    if(rectFilled_toggle.on != rectFilled) {
+      rectFilled = rectFilled_toggle.on;
+    } 
+    if(rectStroked_toggle.on != rectStroked) {
+      rectStroked = rectStroked_toggle.on;
+    } 
     fill(255);
     textSize(24);
     text("Run Program:", 15, 30);
     text("Background Visible:", 15, 60); 
     text("Start Size " + String.valueOf(floor(rectSize)) + " :", 15, 90);
     text("Decrement by " + String.valueOf(rectSizeDecrement) + " :", 15, 120);
+    text("Time per Size " + String.valueOf(timeFrame) + " :", 15, 150);
+    text("Add to Time " + String.valueOf(amountToAdd) + " :", 15, 180);
+    text("Alpha Color Scale  " + String.valueOf(alphaScale) + " :", 15, 210);
+    text("Rects Filled: ", 512, 30);
+    text("Rects Stroked: ", 512, 60);
   }
   
-}
+} //draw()
 
 
 
